@@ -176,10 +176,8 @@ def delete_datastore_resource(resource_id, api_key, ckan_url):
     try:
         delete_url = get_url('datastore_delete', ckan_url)
         response = requests.post(delete_url,
-                                 data=json.dumps({'id': resource_id,
-                                                  'force': True}),
-                                 headers={'Content-Type': 'application/json',
-                                          'Authorization': api_key}
+                                 params={'id': resource_id, 'force': True},
+                                 headers={'Authorization': api_key}
                                  )
         check_response(response, delete_url, 'CKAN',
                        good_status=(201, 200, 404), ignore_no_success=True)
@@ -191,10 +189,8 @@ def datastore_resource_exists(resource_id, api_key, ckan_url):
     try:
         search_url = get_url('datastore_search', ckan_url)
         response = requests.post(search_url,
-                                 params={'id': resource_id,
-                                         'limit': 0},
-                                 headers={'Content-Type': 'application/json',
-                                          'Authorization': api_key}
+                                 params={'id': resource_id, 'limit': 0},
+                                 headers={'Authorization': api_key}
                                  )
         if response.status_code == 404:
             return False
@@ -248,9 +244,8 @@ def get_resource(resource_id, ckan_url, api_key):
     """
     url = get_url('resource_show', ckan_url)
     r = requests.post(url,
-                      data=json.dumps({'id': resource_id}),
-                      headers={'Content-Type': 'application/json',
-                               'Authorization': api_key}
+                      params={'id': resource_id},
+                      headers={'Authorization': api_key}
                       )
     check_response(r, url, 'CKAN')
 
